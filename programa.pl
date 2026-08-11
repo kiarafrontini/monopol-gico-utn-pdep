@@ -33,3 +33,51 @@ estanMotivados(Jugador):-
 estanMotivados(Jugador):-
     progreso(Jugador, _, _),
     forall(ventaja(Jugador, OtroJugador), (ganasDeJugar(OtroJugador, Ganas), 0.5 > Ganas)).
+
+%parte C
+
+propiedad(ana, casaRio).
+propiedad(beto, barWollok).
+propiedad(beto, restoCool).
+propiedad(cari, deptoFamiliar).
+propiedad(dane, deptoFamiliar).
+propiedad(dani, casaJujuy).
+propiedad(dani, casaMendoza). 
+
+ubi(casaRio, bsas).
+ubi(barWollok, cordoba).
+ubi(restoCool, cordoba).
+ubi(deptoFamiliar, bsas).
+ubi(casaJujuy, jujuy).
+ubi(casaMendoza, mendoza). 
+ubi(hotelProlog, cordoba).
+ubi(casaDeHaskelicia, santaFe).
+
+jugadoresProvinciales(Jugador, Provincia):-
+    propiedad(Jugador, _),
+    ubi(_, Provincia), 
+    forall(propiedad(Jugador, Propiedad), ubi(Propiedad, Provincia)). 
+
+
+provinciaCompleta(Provincia, Jugador):-
+    ubi(_, Provincia),
+    propiedad(Jugador, _),
+    forall(ubi(Propiedad, Provincia), propiedad(Jugador, Propiedad)). 
+
+objetivo(ana, expansionista(5)).
+objetivo(beto, coleccionista(bsas)).
+objetivo(beto, coleccionista(cordoba)).
+objetivo(dani, coleccionista(bsas)).
+objetivo(dani, expansionista(3)).
+
+ganadorDelJuego(Jugador):-
+    objetivo(Jugador, _),
+    forall(objetivo(Jugador, Objetivo), cumple(Juegador, Objetivo)).
+
+cumple(Jugador, expansionista(Cantidad)):-
+    findall(Propiedad, propiedad(Jugador, Propiedad), Propiedades),
+    length(Propiedades, Tamanio),
+    Tamanio >= Cantidad. 
+
+cumple(Jugador, coleccionista(Provincia)):-
+    provinciaCompleta(Provincia, Jugador). 
